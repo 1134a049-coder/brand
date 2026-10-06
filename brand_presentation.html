@@ -1,0 +1,2365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>品牌期中報告 - 16:9 五張投影片 (SUKIYA すき家 專題)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- html2pdf.js for 1-click PDF download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #070a12;
+      --bg-card: rgba(15, 20, 32, 0.95);
+      --bg-card-border: rgba(255, 255, 255, 0.1);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      /* Sukiya Theme */
+      --sukiya-primary: #C52026;
+      --sukiya-accent: #F9A01B;
+      --sukiya-glow: rgba(197, 32, 38, 0.35);
+
+      /* Active theme */
+      --accent-current: #C52026;
+      --accent-sub: #F9A01B;
+      --accent-glow: var(--sukiya-glow);
+
+      --font-heading: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      --font-body: 'Noto Sans TC', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* Ambient Glow Backgrounds */
+    .ambient-glow {
+      position: fixed;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%);
+      top: -200px;
+      right: -150px;
+      z-index: 0;
+      pointer-events: none;
+      transition: background 0.6s ease;
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(249, 160, 27, 0.1) 0%, rgba(0,0,0,0) 70%);
+      bottom: -150px;
+      left: -100px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Fixed Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 24px;
+      border-bottom: 1px solid var(--bg-card-border);
+      backdrop-filter: blur(16px);
+      background: rgba(7, 10, 18, 0.9);
+      flex-shrink: 0;
+    }
+
+    .brand-switch-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .brand-btn {
+      padding: 5px 12px;
+      border-radius: 9999px;
+      border: 1px solid var(--bg-card-border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .brand-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    .brand-btn.active {
+      background: var(--accent-current);
+      color: #fff;
+      border-color: var(--accent-sub);
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+
+    .header-center {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ratio-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--accent-sub);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-weight: 700;
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--bg-card-border);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .ctrl-btn.active {
+      background: var(--accent-sub);
+      color: #000;
+      font-weight: 700;
+      border-color: var(--accent-sub);
+    }
+
+    .pdf-btn {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(197, 32, 38, 0.25) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+    }
+
+    .pdf-btn:hover {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.4) 0%, rgba(197, 32, 38, 0.4) 100%);
+      color: #fff;
+    }
+
+    /* Main Container (16:9 Standard Slides) */
+    main.deck-container {
+      flex: 1;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px 20px 76px;
+      width: 100%;
+    }
+
+    /* 16:9 Golden Ratio Frame (Fills Screen Beautifully) */
+    .slide-viewport {
+      width: 100%;
+      max-width: 1180px;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      display: flex;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 20px;
+      padding: 24px 32px 20px;
+      backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.995);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Slide Header Meta */
+    .slide-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    .slide-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-num-pill {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--accent-current);
+      border: 1px solid var(--accent-sub);
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .slide-title {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .slide-subtitle {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .teacher-badge {
+      font-size: 0.75rem;
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .slide-body {
+      flex: 1;
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      align-items: stretch;
+    }
+
+    /* SLIDE 1: BRAND OVERVIEW */
+    .s1-grid {
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 22px;
+      height: 100%;
+    }
+
+    .brand-hero-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .brand-logo-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-circle {
+      width: 78px;
+      height: 78px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid var(--accent-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px var(--accent-glow);
+      flex-shrink: 0;
+    }
+
+    .brand-name-zh {
+      font-size: 2.1rem;
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    .brand-name-en {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-sub);
+      font-family: var(--font-heading);
+      letter-spacing: 0.05em;
+    }
+
+    .brand-quote-box {
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 4px solid var(--accent-current);
+      padding: 14px 18px;
+      border-radius: 0 10px 10px 0;
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      line-height: 1.65;
+    }
+
+    .brand-fast-facts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .fact-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    .fact-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .fact-val {
+      font-size: 1.05rem;
+      font-weight: 800;
+      font-family: var(--font-heading);
+      color: var(--text-main);
+    }
+
+    .brand-visual-frame {
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      position: relative;
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .visual-canvas {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 0;
+      background: transparent;
+      height: 100%;
+    }
+
+    /* PHOTO PLACEHOLDER SYSTEM (PROFESSIONAL SPEC) */
+    .photo-placeholder-box {
+      width: 100%;
+      height: 100%;
+      border: 2px dashed rgba(249, 160, 27, 0.45);
+      background: radial-gradient(circle at center, rgba(197, 32, 38, 0.12) 0%, rgba(10, 14, 24, 0.75) 100%);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .photo-placeholder-box:hover {
+      border-color: rgba(249, 160, 27, 0.85);
+      box-shadow: inset 0 0 50px rgba(197, 32, 38, 0.25), 0 0 20px rgba(249, 160, 27, 0.15);
+    }
+    .placeholder-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(249, 160, 27, 0.15);
+      border: 1px solid rgba(249, 160, 27, 0.4);
+      color: var(--accent-sub);
+      font-size: 0.75rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+    }
+    .placeholder-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(249, 160, 27, 0.12);
+      border: 1px solid rgba(249, 160, 27, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-sub);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+    .placeholder-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.4;
+      max-width: 440px;
+    }
+    .placeholder-desc {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      max-width: 440px;
+    }
+    .placeholder-spec {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #94a3b8;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* MINI PLACEHOLDER (SLIDE 2) */
+    .mini-placeholder {
+      margin-top: 10px;
+      background: rgba(249, 160, 27, 0.05);
+      border: 1.5px dashed rgba(249, 160, 27, 0.35);
+      border-radius: 10px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mini-ph-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(249, 160, 27, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-sub);
+      flex-shrink: 0;
+    }
+    .mini-ph-text {
+      flex: 1;
+    }
+    .mini-ph-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--accent-sub);
+      background: rgba(249, 160, 27, 0.15);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+    .mini-ph-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      line-height: 1.35;
+    }
+    .mini-ph-desc {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    /* AD SOURCE BADGE (SLIDE 3) */
+    .ad-source-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    /* CELEBRITY PORTRAIT PLACEHOLDER (SLIDE 5) */
+    .celeb-placeholder-box {
+      background: rgba(249, 160, 27, 0.06);
+      border: 1.5px dashed rgba(249, 160, 27, 0.4);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 6px;
+    }
+    .celeb-ph-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(249, 160, 27, 0.15);
+      border: 1.5px solid var(--accent-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-sub);
+      flex-shrink: 0;
+    }
+    .celeb-ph-title {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .celeb-ph-desc {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+      margin-top: 3px;
+    }
+    .celeb-ph-spec {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* SLIDE 2: CORE COMPETENCY */
+    .s2-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      height: 100%;
+    }
+
+    .competency-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 7px;
+      height: 100%;
+    }
+
+    .competency-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-sub);
+      flex-shrink: 0;
+    }
+
+    .core-advantage-box {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid var(--accent-current);
+      border-radius: 10px;
+      padding: 10px 14px;
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+
+    .core-highlight {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .core-desc {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .comparison-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .comp-item {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 0.73rem;
+      color: #cbd5e1;
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      line-height: 1.35;
+    }
+
+    .comp-icon {
+      color: var(--accent-sub);
+      font-weight: bold;
+    }
+
+    .hierarchy-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+      flex: 1;
+      margin-top: 2px;
+    }
+
+    .tier-box {
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      flex: 1;
+    }
+
+    .t1 { background: rgba(249, 160, 27, 0.2); border-color: rgba(249, 160, 27, 0.5); }
+    .t2 { background: rgba(249, 160, 27, 0.14); }
+    .t3 { background: rgba(249, 160, 27, 0.09); }
+    .t4 { background: rgba(249, 160, 27, 0.05); }
+    .t5 { background: rgba(255, 255, 255, 0.03); }
+
+    .tier-name {
+      font-weight: 800;
+      font-size: 0.84rem;
+      color: #fff;
+    }
+
+    .tier-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* SLIDE 3: ADVERTISING & REVERSE TA (SCALED FOR 16:9) */
+    .s3-grid {
+      grid-template-columns: 350px 1fr;
+      gap: 24px;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    .ad-phone-mockup {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      border: 6px solid #27272a;
+      border-radius: 28px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .phone-top-bar {
+      height: 22px;
+      background: #18181b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 0.65rem;
+      color: #94a3b8;
+      font-family: var(--font-mono);
+    }
+
+    .phone-notch {
+      width: 55px;
+      height: 8px;
+      background: #000;
+      border-radius: 0 0 6px 6px;
+    }
+
+    .phone-screen-container {
+      flex: 1;
+      width: 100%;
+      height: calc(100% - 22px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #18191a;
+      position: relative;
+      scrollbar-width: none;
+    }
+    .phone-screen-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .phone-real-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      border-radius: 0 0 22px 22px;
+    }
+
+    .ad-card-fb {
+      background: #18191a;
+      color: #e4e6eb;
+      padding: 10px 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ad-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .ad-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-current);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #fff;
+      font-size: 0.72rem;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .ad-meta-title {
+      font-weight: 700;
+      font-size: 0.82rem;
+      line-height: 1.2;
+    }
+
+    .ad-sponsored-tag {
+      font-size: 0.65rem;
+      color: #b0b3b8;
+    }
+
+    .ad-copy {
+      font-size: 0.76rem;
+      line-height: 1.45;
+      margin-bottom: 8px;
+      color: #e4e6eb;
+    }
+
+    .ad-image-box {
+      width: 100%;
+      height: 180px;
+      background: #242526;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ad-social-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: #94a3b8;
+      padding: 6px 2px 2px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .ad-cta-bar {
+      margin-top: 6px;
+      padding: 6px 10px;
+      background: #242526;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+    }
+
+    .ad-cta-btn {
+      background: var(--accent-current);
+      color: #fff;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .ad-analysis-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      height: 100%;
+    }
+
+    .analysis-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .analysis-card h4 {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: var(--accent-sub);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .analysis-card p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      line-height: 1.62;
+    }
+
+    /* SLIDE 4: BRAND POSITIONING MAP */
+    .s4-grid {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    .map-container {
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .positioning-points {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      height: 100%;
+    }
+
+    .stp-badge-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stp-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--accent-sub);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+
+    .stp-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .stp-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* SLIDE 5: BRAND PERSONALITY */
+    .s5-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    .personality-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 8px;
+      height: 100%;
+    }
+
+    .archetype-avatar-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 10px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .archetype-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-sub);
+      box-shadow: 0 0 12px var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      background: #1e293b;
+      flex-shrink: 0;
+    }
+
+    .archetype-name {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .archetype-role {
+      font-size: 0.74rem;
+      color: var(--accent-sub);
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    .trait-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      flex: 1;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .trait-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .trait-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .trait-bar-track {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .trait-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-current), var(--accent-sub));
+      border-radius: 9999px;
+      transition: width 0.5s ease;
+    }
+
+    /* Fixed Footer Navigation */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 24px;
+      border-top: 1px solid var(--bg-card-border);
+      backdrop-filter: blur(16px);
+      background: rgba(7, 10, 18, 0.92);
+      flex-shrink: 0;
+    }
+
+    .footer-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 24px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .dot.active {
+      background: var(--accent-sub);
+      box-shadow: 0 0 10px var(--accent-glow);
+      width: 40px;
+    }
+
+    .nav-arrows {
+      display: flex;
+      gap: 8px;
+    }
+
+    .arrow-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      border: 1px solid var(--bg-card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .arrow-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .arrow-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .key-tip {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* SPEECH NOTES PROMPTER DRAWER */
+    .speech-drawer {
+      position: fixed;
+      bottom: 52px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      width: 92%;
+      max-width: 980px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid var(--accent-sub);
+      border-radius: 16px 16px 0 0;
+      padding: 16px 22px;
+      box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      z-index: 60;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .speech-drawer.open {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .speech-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .speech-title-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .speech-badge {
+      background: var(--accent-current);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .speech-heading {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .speech-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .speech-btn-sm {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .speech-btn-sm:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .speech-close-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.3rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .speech-close-btn:hover {
+      color: #fff;
+    }
+
+    .speech-body {
+      font-size: 0.9rem;
+      color: #f1f5f9;
+      line-height: 1.7;
+      max-height: 140px;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .speech-footer-tip {
+      font-size: 0.72rem;
+      color: var(--accent-sub);
+      margin-top: 6px;
+    }
+
+    /* Teacher notes modal */
+    .notes-drawer {
+      position: fixed;
+      right: 20px;
+      bottom: 56px;
+      width: 360px;
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      display: none;
+      font-size: 0.8rem;
+      line-height: 1.55;
+    }
+
+    .notes-drawer.open {
+      display: block;
+    }
+
+    /* PRINT & PDF EXPORT STYLES (16:9 Landscape) */
+    @media print {
+      @page {
+        size: 16in 9in;
+        margin: 0;
+      }
+      html, body {
+        background: #070a12 !important;
+        color: #f8fafc !important;
+        overflow: visible !important;
+        height: auto !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      header, footer, .ambient-glow, .ambient-glow-2, .notes-drawer, .speech-drawer {
+        display: none !important;
+      }
+      main.deck-container {
+        padding: 0 !important;
+        display: block !important;
+      }
+      .slide-viewport {
+        max-width: 100% !important;
+        aspect-ratio: 16 / 9 !important;
+        display: block !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+      .slide {
+        display: flex !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        width: 16in !important;
+        height: 9in !important;
+        aspect-ratio: 16 / 9 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 40px 56px !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        border: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow" id="ambientGlow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-switch-group">
+      <span class="badge-label">品牌案例:</span>
+      <button class="brand-btn active" id="btnSukiya" onclick="setBrand('sukiya')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        SUKIYA すき家
+      </button>
+      <button class="brand-btn" id="btnStarbucks" onclick="setBrand('starbucks')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        星巴克
+      </button>
+      <button class="brand-btn" id="btnLouisa" onclick="setBrand('louisa')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        路易莎
+      </button>
+    </div>
+
+    <div class="header-center">
+      品牌管理期中報告 <span class="ratio-pill">16 : 9 滿版規格</span>
+    </div>
+
+    <div class="deck-controls">
+      <button class="ctrl-btn" id="btnSpeechToggle" onclick="toggleSpeechDrawer()" title="展開/收合報告講稿提示">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        🎙️ 展開講稿
+      </button>
+
+      <button class="ctrl-btn pdf-btn" onclick="downloadPDF()" title="下載 16:9 PDF 簡報檔案">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        下載 PDF
+      </button>
+
+      <button class="ctrl-btn" onclick="toggleNotes()" title="查看老師評分標準">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        評分重點
+      </button>
+
+      <button class="ctrl-btn" onclick="toggleFullscreen()" title="切換全螢幕模式 (F)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        全螢幕 (F)
+      </button>
+    </div>
+  </header>
+
+  <!-- Main 16:9 Slide Canvas -->
+  <main class="deck-container">
+    <div class="slide-viewport" id="slideViewport">
+
+      <!-- SLIDE 1: BRAND OVERVIEW -->
+      <section class="slide active" id="slide-1">
+        <div class="slide-meta">
+          <div class="slide-title-wrap">
+            <span class="slide-num-pill">SLIDE 01</span>
+            <div>
+              <h2 class="slide-title">品牌名稱與視覺識別</h2>
+              <p class="slide-subtitle">Brand Identity & Visual Presence</p>
+            </div>
+          </div>
+          <div class="teacher-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            課堂要求：確認品牌名稱與照片識別
+          </div>
+        </div>
+
+        <div class="slide-body s1-grid">
+          <div class="brand-hero-card">
+            <div class="brand-logo-area">
+              <div class="brand-logo-circle" id="s1-logo-container"></div>
+              <div>
+                <h1 class="brand-name-zh" id="s1-name-zh">SUKIYA すき家</h1>
+                <div class="brand-name-en" id="s1-name-en">SUKIYA BEEF BOWL (ZENSHO)</div>
+              </div>
+            </div>
+
+            <div class="brand-quote-box" id="s1-slogan"></div>
+
+            <div class="brand-fast-facts">
+              <div class="fact-item">
+                <div class="fact-label">創立年份</div>
+                <div class="fact-val" id="s1-founded">1982 / 日本橫濱</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">產業類別</div>
+                <div class="fact-val" id="s1-category">日式平價連鎖快餐</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">門市規模</div>
+                <div class="fact-val" id="s1-stores">全球 2,600+ / 台灣 65+</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="brand-visual-frame">
+            <div class="photo-placeholder-box" id="s1-photo-placeholder">
+              <div class="placeholder-icon-wrap">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              </div>
+              <span class="placeholder-badge" id="s1-placeholder-badge">【建議配圖留白處】</span>
+              <div class="placeholder-title" id="s1-visual-title">SUKIYA 經典門市外觀／經典牛丼套餐擺盤實拍圖</div>
+              <div class="placeholder-desc" id="s1-placeholder-desc">
+                建議挑選具備<strong>黃底紅字「すき家」碗型發光招牌</strong>與日式紅磚外牆之門市實景照，或招牌中碗牛丼搭配生雞蛋、味噌湯之實體餐點特寫，讓評審第一眼辨識品牌實體樣貌。
+              </div>
+              <div class="placeholder-spec" id="s1-placeholder-spec">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                建議規格：16:9 橫幅比例 • 1200×675 以上高解析度實景照
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: CORE COMPETENCY -->
+      <section class="slide" id="slide-2">
+        <div class="slide-meta">
+          <div class="slide-title-wrap">
+            <span class="slide-num-pill">SLIDE 02</span>
+            <div>
+              <h2 class="slide-title">核心競爭力分析</h2>
+              <p class="slide-subtitle">Core Competency & Product Hierarchy</p>
+            </div>
+          </div>
+          <div class="teacher-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            課堂重點：最厲害且別人搶不走的是什麼？
+          </div>
+        </div>
+
+        <div class="slide-body s2-grid">
+          <div class="competency-card">
+            <div class="competency-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              不可替代的關鍵優勢
+            </div>
+
+            <div class="core-advantage-box">
+              <div class="core-highlight" id="s2-core-highlight"></div>
+              <div class="core-desc" id="s2-core-desc"></div>
+            </div>
+
+            <div class="comparison-list" id="s2-points"></div>
+
+            <div class="mini-placeholder" id="s2-photo-placeholder">
+              <div class="mini-ph-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              </div>
+              <div class="mini-ph-text">
+                <span class="mini-ph-badge">【建議配圖留白處】</span>
+                <div class="mini-ph-title" id="s2-ph-title">ZENSHO MMDS 全球冷鏈物流 或 門市 30 秒出餐動線圖</div>
+                <div class="mini-ph-desc" id="s2-ph-desc">佐證母公司全球直購冷鏈、中央醬汁熬製與門市自動化注飯控肉技術，突顯無可替代的底層壁壘。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="competency-card">
+            <div class="competency-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              產品五大層次分析（科特勒模型）
+            </div>
+
+            <div class="hierarchy-container" id="s2-hierarchy"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: ADVERTISING & REVERSE TA (SCALED UP FOR 16:9) -->
+      <section class="slide" id="slide-3">
+        <div class="slide-meta">
+          <div class="slide-title-wrap">
+            <span class="slide-num-pill">SLIDE 03</span>
+            <div>
+              <h2 class="slide-title">廣告渠道與客群反推洞察</h2>
+              <p class="slide-subtitle">Ad Placement Channel & Reverse Customer Profiling</p>
+            </div>
+          </div>
+          <div class="teacher-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            課堂重點：截取廣告圖反推背後鎖定族群
+          </div>
+        </div>
+
+        <div class="slide-body s3-grid">
+          <!-- Left: Phone Feed Ad Mockup -->
+          <div class="ad-phone-mockup">
+            <div class="phone-top-bar">
+              <span>12:30</span>
+              <div class="phone-notch"></div>
+              <span>5G 98%</span>
+            </div>
+            <div class="phone-screen-container" id="s3-phone-screen">
+              <!-- Dynamically populated: Real image for Sukiya, or Simulated Card for others -->
+            </div>
+            <div class="ad-source-badge">
+              <span>📱 實體驗證廣告：Facebook 官方贊助貼文（牛溫玉和風芡汁玉子丼 $154）</span>
+            </div>
+          </div>
+
+          <!-- Right: Analysis Panel -->
+          <div class="ad-analysis-panel">
+            <div class="analysis-card">
+              <h4>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                廣告投放渠道與時段分析
+              </h4>
+              <p id="s3-channel-analysis"></p>
+            </div>
+
+            <div class="analysis-card">
+              <h4>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                從廣告反推的「目標客群 (TA)」
+              </h4>
+              <p id="s3-ta-analysis"></p>
+            </div>
+
+            <div class="analysis-card">
+              <h4>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                行銷啟示（老師強調）
+              </h4>
+              <p id="s3-lesson"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: BRAND POSITIONING MAP -->
+      <section class="slide" id="slide-4">
+        <div class="slide-meta">
+          <div class="slide-title-wrap">
+            <span class="slide-num-pill">SLIDE 04</span>
+            <div>
+              <h2 class="slide-title">品牌定位與定位圖</h2>
+              <p class="slide-subtitle">Brand Positioning & Perceptual Map (STP)</p>
+            </div>
+          </div>
+          <div class="teacher-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            課堂重點：面向哪些客群？繪製二維定位圖
+          </div>
+        </div>
+
+        <div class="slide-body s4-grid">
+          <div class="map-container">
+            <svg class="map-svg" viewBox="0 0 540 330" id="positioningMapSvg"></svg>
+          </div>
+
+          <div class="positioning-points">
+            <div class="stp-badge-box">
+              <div class="stp-title"><span class="stp-tag">S</span>市場區隔 (Segmentation)</div>
+              <div class="stp-desc" id="s4-seg-desc"></div>
+            </div>
+
+            <div class="stp-badge-box">
+              <div class="stp-title"><span class="stp-tag">T</span>目標市場 (Targeting)</div>
+              <div class="stp-desc" id="s4-target-desc"></div>
+            </div>
+
+            <div class="stp-badge-box">
+              <div class="stp-title"><span class="stp-tag">P</span>定位價值主張 (Positioning)</div>
+              <div class="stp-desc" id="s4-pos-desc"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: BRAND PERSONALITY -->
+      <section class="slide" id="slide-5">
+        <div class="slide-meta">
+          <div class="slide-title-wrap">
+            <span class="slide-num-pill">SLIDE 05</span>
+            <div>
+              <h2 class="slide-title">品牌個性與擬人化代表</h2>
+              <p class="slide-subtitle">Brand Personality Dimensions & Archetype</p>
+            </div>
+          </div>
+          <div class="teacher-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            課堂重點：若品牌是一個人？找代言人/明星代表
+          </div>
+        </div>
+
+        <div class="slide-body s5-grid">
+          <div class="personality-card">
+            <div class="competency-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              擬人化形象代言代表（Brand Archetype）
+            </div>
+
+            <div class="archetype-avatar-box">
+              <div class="archetype-img" id="s5-archetype-avatar"></div>
+              <div>
+                <div class="archetype-name" id="s5-archetype-name"></div>
+                <div class="archetype-role" id="s5-archetype-traits"></div>
+              </div>
+            </div>
+
+            <div class="brand-quote-box" id="s5-archetype-quote" style="padding: 8px 12px; font-size: 0.78rem; line-height: 1.45; margin: 2px 0;"></div>
+
+            <div class="celeb-placeholder-box" id="s5-celebrity-placeholder" style="padding: 8px 12px; margin-top: 2px; flex-direction: column; align-items: stretch; gap: 5px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div class="celeb-ph-icon-box" style="width: 34px; height: 34px; font-size:0.9rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <span class="mini-ph-badge">【代言對標留白處】</span>
+                  <div class="celeb-ph-title" id="s5-celeb-title" style="font-size: 0.82rem; font-weight:800;">建議配圖：演員「劉冠廷」親切幹練生活形象照</div>
+                </div>
+              </div>
+              <div class="celeb-ph-desc" id="s5-celeb-desc" style="font-size: 0.72rem; line-height: 1.4; color:#cbd5e1;">
+                就像劉冠廷給人的形象——親民踏實、不講大話、做事俐落，演活小人物生活底氣。建議挑選穿素色襯衫/T-shirt、捲袖微笑之生活感近照。
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px dashed rgba(255,255,255,0.1); padding-top:3px;">
+                <span class="celeb-ph-spec" id="s5-celeb-spec" style="font-size: 0.65rem;">建議規格：1:1 正方形 • 500×500px 以上</span>
+                <span id="s5-celebrity-ref" style="font-size: 0.70rem; color: var(--accent-sub); font-weight:700;">★ 演員 劉冠廷 擬人化對標</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="personality-card">
+            <div class="competency-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              品牌個性五大光譜指標
+            </div>
+
+            <div class="trait-group" id="s5-traits-container"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Interactive Speech Prompter Drawer -->
+  <div class="speech-drawer" id="speechDrawer">
+    <div class="speech-header">
+      <div class="speech-title-box">
+        <span class="speech-badge" id="speechSlideBadge">SLIDE 01 講稿</span>
+        <span class="speech-heading" id="speechSlideTitle">品牌名稱與視覺識別</span>
+      </div>
+      <div class="speech-actions">
+        <button class="speech-btn-sm" onclick="copyCurrentSpeech()" title="複製當前投影片講稿到剪貼簿">📋 複製當頁講稿</button>
+        <button class="speech-btn-sm" onclick="toggleAllSpeechModal()" title="查看完整 5 頁連貫報告講稿">📄 查看全篇講稿</button>
+        <button class="speech-close-btn" onclick="toggleSpeechDrawer()">&times;</button>
+      </div>
+    </div>
+    <div class="speech-body" id="speechText">
+      <!-- Injected by JS -->
+    </div>
+    <div class="speech-footer-tip">
+      <span>💡 <strong>口頭報告提示：</strong>按下鍵盤 <kbd style="background:rgba(255,255,255,0.15); padding:1px 5px; border-radius:3px;">←</kbd> <kbd style="background:rgba(255,255,255,0.15); padding:1px 5px; border-radius:3px;">→</kbd> 換頁時，此處講稿會同步自動翻頁！</span>
+    </div>
+  </div>
+
+  <!-- Footer Navigation -->
+  <footer>
+    <div class="footer-dots" id="dotsContainer">
+      <div class="dot active" onclick="goToSlide(0)"></div>
+      <div class="dot" onclick="goToSlide(1)"></div>
+      <div class="dot" onclick="goToSlide(2)"></div>
+      <div class="dot" onclick="goToSlide(3)"></div>
+      <div class="dot" onclick="goToSlide(4)"></div>
+    </div>
+
+    <div class="key-tip">
+      鍵盤導航：<kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">←</kbd> <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">→</kbd> 或 <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">Space</kbd> • 按 <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">S</kbd> 開啟講稿
+    </div>
+
+    <div class="nav-arrows">
+      <button class="arrow-btn" id="prevBtn" onclick="prevSlide()" disabled title="上一頁">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="arrow-btn" id="nextBtn" onclick="nextSlide()" title="下一頁">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Lecture Notes Modal -->
+  <div class="notes-drawer" id="notesDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <h3 style="font-size: 0.95rem; color: #fbbf24; font-weight: 800;">👨‍🏫 老師錄音評分重點指引</h3>
+      <button onclick="toggleNotes()" style="background:none; border:none; color:#94a3b8; cursor:pointer; font-size:1.2rem;">&times;</button>
+    </div>
+    <ul style="padding-left: 18px; color: #cbd5e1; font-size: 0.78rem; display: flex; flex-direction: column; gap: 5px;">
+      <li><strong>報告規格</strong>：嚴格要求「五張投影片」，每組約5分鐘，言簡意賅講出重點。</li>
+      <li><strong>第1張（品牌）</strong>：放品牌照片/識別即可，不需贅述多餘概念。</li>
+      <li><strong>第2張（核心競爭力）</strong>：廠商最厲害且別人搶不走的是什麼？（如善商MMDS全球冷鏈 vs 鰻魚飯店自調醬汁）。</li>
+      <li><strong>第3張（廣告）</strong>：放實際廣告截圖，關鍵在<strong>「反推TA是誰、為什麼選這個平台投放」</strong>。</li>
+      <li><strong>第4張（品牌定位）</strong>：畫出X/Y軸二維定位圖，標明客群與競品區隔（切忌客群混亂如Lexus/Toyota混在一起）。</li>
+      <li><strong>第5張（品牌個性）</strong>：把品牌擬人化，講出性格特徵並<strong>指名一位具體代表人物</strong>。</li>
+      <li><strong>重要提醒</strong>：「城市行銷」是期末報告題目，本次與期中報告<strong>千萬不要做城市行銷</strong>！</li>
+    </ul>
+  </div>
+
+  <script>
+    // Brand Data Store
+    const brandData = {
+      sukiya: {
+        primaryColor: '#C52026',
+        accentColor: '#F9A01B',
+        glowColor: 'rgba(197, 32, 38, 0.35)',
+        logoSvg: `
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="#C52026"/>
+            <path d="M4 14C7 18 17 18 20 14" stroke="#F9A01B" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M7 9C9 7 15 7 17 9" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="2" fill="#F9A01B"/>
+          </svg>
+        `,
+        nameZh: 'SUKIYA すき家',
+        nameEn: 'SUKIYA BEEF BOWL (ZENSHO)',
+        slogan: '「提供安全美味、價格實惠的食糧，成為每個人日常生活的元氣補給站。」<br>全球第一大日式牛丼連鎖品牌，以 <strong>24hr 營業、30 秒極速出餐、多元客製化尺寸</strong> 席捲全台外食市場。',
+        founded: '1982 / 日本橫濱 (母公司 ZENSHO)',
+        category: '日式連鎖平價快餐 / 牛丼',
+        stores: '全球 2,600+ / 台灣 65+ 門市',
+        visualTag: '日本第一牛丼霸主',
+        visualTitle: 'SUKIYA 經典門市外觀／經典牛丼套餐擺盤實拍圖',
+        s1PlaceholderTitle: 'SUKIYA 經典門市外觀／經典牛丼套餐擺盤實拍圖',
+        s1PlaceholderDesc: '建議挑選具備<strong>黃底紅字「すき家」碗型發光招牌</strong>與日式紅磚外牆之門市實景照，或招牌特盛牛丼搭配生雞蛋、味噌湯之實體餐點特寫，讓評審第一眼辨識品牌實體樣貌。',
+        s1PlaceholderSpec: '建議規格：16:9 橫幅比例 • 1200×675 以上高解析度實景照',
+        visualBg: 'radial-gradient(circle at center, #8a0c10 0%, #200204 90%)',
+
+        // Slide 2: Core Competency
+        coreHighlight: '全球垂直整合供應鏈 (MMDS) 與極致翻桌率',
+        coreDesc: '母公司 Zensho 自建全球直購冷鏈與自動化注飯控肉系統，點餐到出餐僅需 30~60 秒；打破傳統牛丼男性吧台限制，以「家庭席座」與「多尺寸配菜客製」創造無人能及的營運效率。',
+        s2PlaceholderTitle: 'ZENSHO MMDS 全球冷鏈物流 或 門市 30 秒出餐動線圖',
+        s2PlaceholderDesc: '佐證母公司全球直購冷鏈、中央醬汁熬製與門市自動化注飯控肉技術，突顯無可替代的底層壁壘。',
+        compPoints: [
+          { label: '自建 MMDS 垂直供應鏈', text: '從全球牧場原塊牛肉採購、冷鏈熟成到中央醬汁統一熬製，成本與品質達到極致標準化。' },
+          { label: '24 小時無縫全時段營運', text: '填補清晨與深夜都會區溫暖熟食空缺，門市單坪坪效與出餐速度（30秒極速）領先同業。' },
+          { label: '業界最多尺寸與配菜組合', text: '超值碗至特大碗 6 種份量級距，搭配秋葵、起司、明太子，成功打破女性與家庭客群壁壘。' }
+        ],
+        hierarchy: [
+          { tier: '5. 潛在產品 (Potential)', desc: '24hr 智能自動外帶取餐櫃、冷凍生鮮電商、植物肉健康牛丼', class: 't1' },
+          { tier: '4. 擴增產品 (Augmented)', desc: '免排隊桌邊服務鈴、外帶得來速通道、多元行動支付、加購青菜套餐', class: 't2' },
+          { tier: '3. 期望產品 (Expected)', desc: '冷氣充足、免費冰涼麥茶、乾淨餐具與洗手間、家庭沙發座位', class: 't3' },
+          { tier: '2. 基本產品 (Basic)', desc: '一碗熱騰騰的現煮牛肉片洋蔥丼飯、紅薑、味噌湯', class: 't4' },
+          { tier: '1. 核心利益 (Core)', desc: '快速填飽肚子、補充日常工作與讀書所需的滿滿能量與體力', class: 't5' }
+        ],
+
+        // Slide 3: Advertising
+        adAvatar: 'す',
+        adBrand: 'Sukiya Taiwan - すき家 台灣',
+        adCopy: '【🌟 超絕配❤️ 和風芡汁X牛丼 🌟】SUKIYA 將於8月19日全新推出滑順「牛溫玉和風芡汁玉子丼」！中秋月見和風美味，中碗只要 $154！',
+        adImgGraphic: '',
+        channelAnalysis: '投放平台為 <strong>Facebook 官方粉專（Sukiya Taiwan - すき家 台灣）與 Instagram 贊助貼文</strong>。廣告發布於 8 月中旬，精準搭上<strong>中秋節「月見（月兔・溫泉蛋）」節慶檔期</strong>，以和風芡汁結合招牌牛丼創造話題。',
+        taAnalysis: '<strong>喜愛嚐鮮的都會上班族、大學生、家庭客群</strong>。定價 $154 仍落在 150 元實惠區間，文案主打「超絕配・滑順和風芡汁」，滿足外食族追求「高CP值又想吃豐盛新菜」的消費心理。',
+        lessonText: '課堂核心呼應（老師重點）：廣告預算必須精準投放！SUKIYA 在社群投放高飽和度、極具食慾感的「爆漿溫泉蛋+濃郁和風芡汁」新品視覺，直接在動態牆誘發飢餓感，將社群流量快速導流至全台實體門市。',
+
+        // Slide 4: Positioning Map
+        segDesc: '依據「出餐速度與價格門檻」以及「菜單豐富度/家庭座位包容性」劃分外食快餐市場。',
+        targetDesc: '聚焦追求快速、高性價比、希望吃現煮熱食的學生族、上班族與帶著小孩的外食家庭。',
+        posDesc: '位於「超平價極速・高多樣性家庭友善」的絕對優勢象限，打破傳統牛丼僅服務單身男性的狹隘定位。',
+        mapItems: [
+          { name: 'SUKIYA (本品牌)', x: 390, y: 195, fill: '#C52026', isTarget: true },
+          { name: '吉野家 Yoshinoya', x: 280, y: 140, fill: '#ea580c' },
+          { name: '松屋 Matsuya', x: 330, y: 230, fill: '#eab308' },
+          { name: '三商巧福', x: 230, y: 170, fill: '#ef4444' },
+          { name: '7-11/全家 微波便當', x: 100, y: 270, fill: '#38bdf8' },
+          { name: '大戶屋 / 彌生軒', x: 420, y: 70, fill: '#ec4899' }
+        ],
+        xAxisLabel: '菜單豐富度與家庭包容性 (純男性吧台 → 多元客製/家庭桌席)',
+        yAxisLabel: '價格與用餐步調 (平價極速出餐 → 高價悠閒定食)',
+
+        // Slide 5: Brand Personality
+        archetypeAvatar: '🤝',
+        archetypeName: '務實可靠、隨時都在的國民神隊友',
+        archetypeTraits: '親民踏實・極度俐落・不講大話・隨時都在',
+        archetypeQuote: '「它不是浮誇的網美，也不是奢華的高級紳士，而是『一位務實可靠、隨時都在的國民神隊友』。無論你是半夜加班、還是趕著上課，走進 SUKIYA，他總是能在 30 秒內端上一碗熱騰騰、份量充足的牛肉飯，給你滿滿的生活底氣與支持。」',
+        celebrityRef: '✨ 擬人化明星對標：<strong>演員 劉冠廷</strong>。就像劉冠廷給人的形象一樣——親民、踏實、不講大話，但做事極度俐落，演活基層生活百態，正是 SUKIYA 最迷人的品牌靈魂。',
+        s5PlaceholderTitle: '建議配圖：演員「劉冠廷」親切幹練生活形象照',
+        s5PlaceholderDesc: '建議挑選穿著簡約素色襯衫/T-shirt、捲起袖子、眼神踏實真誠之自然生活照（避免過度華麗紅毯禮服），完美對標「親民踏實・極度俐落・隨時都在」之國民神隊友精神！',
+        s5PlaceholderSpec: '建議規格：1:1 正方形 • 500×500px 以上清晰肖像',
+        traits: [
+          { name: '親民踏實 (Sincerity)', score: 95, left: '浮誇網美', right: '真誠可靠' },
+          { name: '極速俐落 (Competence)', score: 92, left: '拖泥帶水', right: '30秒高效率' },
+          { name: '全時守候 (Supportiveness)', score: 90, left: '高冷設限', right: '24hr溫暖陪伴' },
+          { name: '生活底氣 (Groundedness)', score: 88, left: '虛浮噱頭', right: '飽足扎實肉量' },
+          { name: '奢華溢價 (Sophistication)', score: 18, left: '庶民神隊友', right: '貴族高級紳士' }
+        ],
+
+        // 5-Slide Oral Speech Notes
+        speechNotes: [
+          `「各位老師、同學好，我們這組要報告的品牌是日本第一大牛丼連鎖品牌——SUKIYA すき家。
+它創立於 1982 年日本橫濱，隸屬於全球餐飲巨頭 ZENSHO 善商控股。它的品牌核心宗旨是『提供安全美味、價格實惠的食糧，成為每個人日常生活的元氣補給站』。在台灣目前已經擁有超過 65 間門市，以標誌性的紅磚門市外觀、24 小時不打烊的溫暖現煮熱食，深入大街小巷，是全台辨識度最高的平價日式食堂代表。」`,
+
+          `「接著看到第 2 頁，SUKIYA 的核心競爭力。
+很多人以為賣牛丼很簡單，但 SUKIYA 最厲害、別人搶不走的地方在於：母公司 ZENSHO 獨步全球的『MMDS 垂直整合供應鏈』。從全球牧場牛肉採購、冷鏈熟成到中央廚房特調醬汁，實現極致的成本優勢與穩定品質。再加上全台極少數能做到『24小時全時段營運』與『30秒快速出餐』，極大化翻桌率。
+對照科特勒產品五層次：核心利益是快速填飽肚子的溫暖能量；基本產品是現煮牛丼與洋蔥；期望產品是免費冰涼麥茶與乾淨空調；擴增產品則是業界唯一的 6 種份量級距（超值碗到特大碗）與免排隊桌邊服務鈴；潛在產品更延伸至 24hr 智能自取櫃與冷凍生鮮。」`,
+
+          `「第 3 頁是廣告渠道與客群反推洞察。
+大家可以看到左邊手機外框內，是我們截取的 SUKIYA 官方 Facebook 真實廣告——**秋季新上市的『牛溫玉和風芡汁玉子丼（中碗 $154）』**。
+從畫面可以看到，它結合了中秋月見、月兔的和風意象，視覺核心是滑順濃郁的芡汁與誘人半熟溫泉蛋。
+從投放平台與文案反推：SUKIYA 主要透過 FB 與 IG 社群廣告，鎖定注重高性價比、喜歡日式風味層次的**年輕上班族、學生與家庭客**。用極具食慾感的特寫與平易近人的 154 元定價，直接擊中外食族的嚐鮮心理，這正呼應了老師強調的『廣告預算必須投在最能觸動目標受眾的平台上』！」`,
+
+          `「第 4 頁是品牌定位與二維定位圖。
+我們以『菜單多樣性／家庭友善度』為橫軸，『價格與用餐速度』為縱軸。
+在 STP 分析上，SUKIYA 區隔出傳統牛丼只服務單身男性的盲點，鎖定追求現煮快餐的上班族、學生以及帶著小孩的家庭外食族。
+大家看定位圖：吉野家價格稍高、松屋偏個人吧台自販機、大戶屋是高價定食、超商便當缺乏溫度。SUKIYA 成功佔據了『超平價極速出餐 × 高多樣性家庭友善』的黃金象限，成為高性價比與全員包容的領頭羊。」`,
+
+          `「各位老師、同學好，最後看到第 5 頁的品牌個性。
+如果要把 SUKIYA 擬人化，我們團隊認為它不是浮誇的網美，也不是奢華的高級紳士，而是『一位務實可靠、隨時都在的國民神隊友』。
+就像演員劉冠廷給人的形象一樣——親民、踏實、不講大話，但做事極度俐落。無論你是半夜加班、還是趕著上課，走進 SUKIYA，他總是能在 30 秒內端上一碗熱騰騰、份量充足的牛肉飯，給你滿滿的生活底氣與支持。這就是 SUKIYA 最迷人的品牌靈魂。以上是我們的報告，謝謝大家！」`
+        ]
+      },
+
+      starbucks: {
+        primaryColor: '#00704A',
+        accentColor: '#00A862',
+        glowColor: 'rgba(0, 168, 98, 0.3)',
+        logoSvg: `
+          <svg width="50" height="50" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#00A862" stroke-width="2"/>
+            <path d="M12 6c-2.5 0-4 1.5-4 4 0 2.5 2 4.5 4 6 2-1.5 4-3.5 4-6 0-2.5-1.5-4-4-4z" fill="#00A862"/>
+            <circle cx="12" cy="10" r="1.5" fill="#fff"/>
+          </svg>
+        `,
+        nameZh: '星巴克',
+        nameEn: 'STARBUCKS COFFEE',
+        slogan: '「激發並孕育人文精神——每人、每杯、每個社區。」<br>不僅是賣咖啡，更是提供家與辦公室之間的<strong>「第三空間（Third Place）」</strong>體驗。',
+        founded: '1971 / 美國西雅圖',
+        category: '特精品連鎖咖啡',
+        stores: '全球 38,000+ / 台灣 560+',
+        visualTag: '第三生活空間',
+        visualTitle: '精緻木質調・商務洽談與生活品味標竿',
+        s1PlaceholderTitle: '星巴克 典藏旗艦門市外觀 或 經典咖啡手沖杯景實拍',
+        s1PlaceholderDesc: '建議挑選採光良好、兼具綠色雙尾美人魚圓形招牌與精緻木質調裝潢之門市實景，強調「第三生活空間」的商務品味氛圍。',
+        s1PlaceholderSpec: '建議規格：16:9 橫幅比例 • 1200×675 以上高解析度實景照',
+        visualBg: 'radial-gradient(circle at center, #00704A 0%, #062319 80%)',
+
+        coreHighlight: '高品質標準化與「第三空間」氛圍溢價',
+        coreDesc: '星巴克最強的並非咖啡豆成本，而是建立了強大的品牌認同感與高標準服務空間，讓消費者願意為「坐下來享受氛圍」支付高於超商數倍的溢價。',
+        s2PlaceholderTitle: '星巴克「第三空間」人因工學空間設計 或 夥伴杯身塗鴉手寫體驗',
+        s2PlaceholderDesc: '突顯咖啡師親切連結與空間氛圍溢價，佐證超商無法複製的體驗優勢。',
+        compPoints: [
+          { label: '空間文化優勢', text: '音樂、燈光、插座與採光經過精密人因設計，構成商務與閱讀首選。' },
+          { label: '數位會員生態 (Rewards)', text: '全台百萬級活躍會員，App儲值與集星機制創造極高的顧客終身價值。' },
+          { label: '夥伴服務文化', text: '稱員工為「Partner」，杯身親筆寫顧客名字與手繪笑臉，打造情感連結。' }
+        ],
+        hierarchy: [
+          { tier: '5. 潛在產品 (Potential)', desc: 'Web3 數位旅程 (Odyssey)、元宇宙體驗、無人化概念店', class: 't1' },
+          { tier: '4. 擴增產品 (Augmented)', desc: '客製化牛奶/糖漿、免費尊榮空間、禮遇集星回饋、聯名杯款', class: 't2' },
+          { tier: '3. 期望產品 (Expected)', desc: '穩定高速 Wi-Fi、舒適沙發、乾淨衛生洗手間、優質空調音樂', class: 't3' },
+          { tier: '2. 基本產品 (Basic)', desc: '一杯溫熱的高品質義式拿鐵、美式黑咖啡、紙杯防燙套', class: 't4' },
+          { tier: '1. 核心利益 (Core)', desc: '咖啡因提神效果、舒緩工作壓力的休憩時刻', class: 't5' }
+        ],
+
+        adAvatar: 'S',
+        adBrand: 'Starbucks Taiwan 星巴克咖啡',
+        adCopy: '【午後好友分享日 ☕】上班累了嗎？快揪身邊的好戰友，享受專屬的香醇時光！指定飲品買一送一，讓好心情隨咖啡香蔓延 ✨',
+        adImgGraphic: `
+          <div style="text-align:center; padding: 12px; background: linear-gradient(135deg, #00704A, #062319); width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            <div style="font-size:2.2rem;">☕ ☕</div>
+            <div style="font-weight:900; color:#fff; font-size:1.05rem; margin-top:4px;">BUY 1 GET 1 FREE</div>
+            <div style="font-size:0.75rem; color:#86efac; margin-top:3px; font-weight:700;">好友分享日 • 11:00-20:00</div>
+          </div>
+        `,
+        channelAnalysis: '主要投放於 <strong>Facebook 官方粉專、Instagram 視覺故事、LINE 官方推播</strong>。特別選在<strong>週一早晨、連假開工日午後</strong>，鎖定白領上班族。',
+        taAnalysis: '<strong>25-45歲都會上班族、商務白領、小資族</strong>。利用「買一送一呼叫同事」誘發辦公室團訂社交。',
+        lessonText: '精準廣告效益：不亂花預算在電視大眾廣告，而是用社群「買一送一」當作低成本高黏著度的集客誘餌，驅動實體門市人流。',
+
+        segDesc: '依據「價格溢價」與「空間屬性（久坐社交 vs 快速外帶）」切分。',
+        targetDesc: '鎖定重視氛圍、商務體面感、具備中高可支配所得的都會菁英與大學生族群。',
+        posDesc: '位於「高溢價・高品質第三空間」的象限霸主，與平價快速提神的超商咖啡形成鮮明對比。',
+        mapItems: [
+          { name: '星巴克 (本品牌)', x: 390, y: 70, fill: '#00A862', isTarget: true },
+          { name: '路易莎', x: 260, y: 150, fill: '#f58220' },
+          { name: 'cama café', x: 190, y: 160, fill: '#eab308' },
+          { name: '7-11 City Cafe', x: 100, y: 260, fill: '#38bdf8' },
+          { name: '全家 Let\'s Cafe', x: 130, y: 240, fill: '#818cf8' },
+          { name: '獨立文青咖啡館', x: 420, y: 140, fill: '#ec4899' }
+        ],
+        xAxisLabel: '空間氛圍與社交價值 (外帶機能 → 舒適第三空間)',
+        yAxisLabel: '價格與品牌溢價 (平價實惠 → 高端精品)',
+
+        archetypeAvatar: '👨‍💼',
+        archetypeName: '優雅自信的都會菁英 (The Sophisticated Urbanite)',
+        archetypeTraits: '知性・品味・國際視野・從容優雅',
+        archetypeQuote: '「穿著合身剪裁的西裝或簡約毛衣，端著深烘焙美式咖啡，在明亮窗邊專注敲打著筆電，隨時準備迎接國際會議。」',
+        celebrityRef: '✨ 擬人化明星對標：<strong>張震、艾瑪華森 (Emma Watson)、梁朝偉</strong>。給人專業可靠、沉穩、具高質感文化涵養的鮮明印象。',
+        s5PlaceholderTitle: '建議配圖：演員「張震」或「艾瑪華森」知性自信形象照',
+        s5PlaceholderDesc: '建議挑選舉止優雅從容、帶有都會國際品味感之形象肖像，完美對標「知性成熟、自信優雅」之都會菁英氣質。',
+        s5PlaceholderSpec: '建議規格：1:1 正方形 • 500×500px 以上清晰肖像',
+        traits: [
+          { name: '知性品味 (Sophistication)', score: 92, left: '純樸大眾', right: '尊榮高雅' },
+          { name: '能力信賴 (Competence)', score: 88, left: '初創生澀', right: '專業權威' },
+          { name: '熱情活力 (Excitement)', score: 70, left: '保守傳統', right: '時尚潮流' },
+          { name: '親和友善 (Sincerity)', score: 78, left: '疏離冷酷', right: '溫暖親切' },
+          { name: '大膽強韌 (Ruggedness)', score: 35, left: '細緻都會', right: '粗獷野性' }
+        ],
+        speechNotes: [
+          `「老師、各位同學好，我們這組選擇的分析品牌是全球最具代表性的連鎖精品咖啡——星巴克 (Starbucks)。星巴克自1971年創立於西雅圖，核心精神不僅在於咖啡本身，而是開創了居家與辦公室之間的『第三空間』，在台灣擁有超過560家門市，是生活品味與商務社交的標竿品牌。」`,
+          `「第2頁核心競爭力：星巴克最不可替代的優勢在於其『第三空間氛圍溢價』與高標準數位會員生態。消費者願意花超商3倍的價格，買的是舒適沙發、音樂採光與尊榮感。在科特勒五層次中，核心利益是舒緩身心的休憩時刻；擴增產品則是高度客製化與星禮程會員回饋。」`,
+          `「第3頁廣告與客群反推：星巴克主力廣告集中在FB與IG，最著名的便是『午後好友分享日（買一送一）』。從需要兩人同行的機制可以反推，其精準鎖定都會區白領上班族、小資同事與商務人士，利用社群裂變快速在離峰午後帶動門市來客量。」`,
+          `「第4頁品牌定位：在二維定位圖上，以『空間社交價值』為橫軸，『價格品牌溢價』為縱軸。超商咖啡主打低價機能快速外帶，而星巴克則牢牢佔據右上角的『高端精品・極致舒適空間』象限，與平價連鎖形成明顯市場區隔。」`,
+          `「第5頁品牌個性：如果星巴克是一個人，他就是一位『知性優雅、自信從容的都會菁英』。就像張震或艾瑪華森給人的感覺一樣，舉手投足帶著國際視野與生活美感，在商業能力與文化品味上都達到極致平衡。」`
+        ]
+      },
+
+      louisa: {
+        primaryColor: '#F58220',
+        accentColor: '#FFA14A',
+        glowColor: 'rgba(245, 130, 32, 0.3)',
+        logoSvg: `
+          <svg width="50" height="50" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#F58220" stroke-width="2"/>
+            <path d="M7 14c2-4 6-5 9-2-2 3-5 5-9 2z" fill="#F58220"/>
+            <circle cx="10" cy="10" r="1.5" fill="#fff"/>
+          </svg>
+        `,
+        nameZh: '路易莎咖啡',
+        nameEn: 'LOUISA COFFEE',
+        slogan: '「全方位平價莊園級咖啡，為大眾生活提供隨手可得的美好日常。」<br>以高CP值莊園級豆子與密集街角門市，成為全台覆蓋最廣的國民連鎖咖啡館。',
+        founded: '2006 / 台灣台北',
+        category: '在地連鎖精品咖啡',
+        stores: '台灣 540+ 門市',
+        visualTag: '國民平價莊園',
+        visualTitle: '親切平實・學生K書與高性價比日常咖啡',
+        s1PlaceholderTitle: '路易莎 街角大門市外觀 或 經典莊園拿鐵搭配熱壓吐司實拍',
+        s1PlaceholderDesc: '建議挑選具備鮮明橘黑「女神側面剪影」招牌之複合門市實景，突顯「平價親民、日常唾手可得」之街角咖啡文化。',
+        s1PlaceholderSpec: '建議規格：16:9 橫幅比例 • 1200×675 以上高解析度實景照',
+        visualBg: 'radial-gradient(circle at center, #F58220 0%, #3d1c02 80%)',
+
+        coreHighlight: '自有中央烘豆廠供應鏈與極致性價比（高CP值）',
+        coreDesc: '擁有亞洲規模頂尖的自建智慧烘豆廠與中央餐食廚房，能將莊園級咖啡豆及豐富輕食（壓磚吐司）以親民價格供應全台，形成垂直整合壁壘。',
+        s2PlaceholderTitle: '路易莎 亞洲級中央烘豆廠垂直整合 或 大長桌自修插座客席區',
+        s2PlaceholderDesc: '突顯自主烘豆廠控管成本優勢與極致自習友善環境，佐證高性價比護城河。',
+        compPoints: [
+          { label: '自建垂直供應鏈', text: '中央烘豆廠垂直控管烘焙品管與豆源，有效壓低原物料進貨成本。' },
+          { label: '友善插座自習環境', text: '門市大量配置插座與開闊大長桌，成為學生、自由工作者工作與備考的「國民自修室」。' },
+          { label: '豐富複合式餐食', text: '輕食、生吐司、甜點完整自產，非單純依賴飲品，提升客單價組合。' }
+        ],
+        hierarchy: [
+          { tier: '5. 潛在產品 (Potential)', desc: '健身房複合店 (Self room)、軌道經濟智能取餐、聯名外銷豆', class: 't1' },
+          { tier: '4. 擴增產品 (Augmented)', desc: '黑卡會員專屬折扣、寄杯優惠系統、外送免運組合方案', class: 't2' },
+          { tier: '3. 期望產品 (Expected)', desc: '免費插座與座位、冷氣充足的長時停留空間、多樣化現做熱壓吐司', class: 't3' },
+          { tier: '2. 基本產品 (Basic)', desc: '平價平實的經典美式、莊園拿鐵咖啡、外帶杯裝', class: 't4' },
+          { tier: '1. 核心利益 (Core)', desc: '低門檻的日常提神需求、實惠的自修與歇腳空間', class: 't5' }
+        ],
+
+        adAvatar: 'L',
+        adBrand: 'Louisa Coffee 路易莎咖啡',
+        adCopy: '【黑卡會員專屬限定 ✨】本月精選莊園咖啡限時 7 折！搭配熱壓吐司只要銅板價，陪伴你每個全力衝刺的早晨與午後 🥪☕',
+        adImgGraphic: `
+          <div style="text-align:center; padding: 12px; background: linear-gradient(135deg, #F58220, #451a03); width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            <div style="font-size:2.2rem;">🥪 ☕</div>
+            <div style="font-weight:900; color:#fff; font-size:1.05rem; margin-top:4px;">BLACK CARD SPECIAL</div>
+            <div style="font-size:0.75rem; color:#fed7aa; margin-top:3px; font-weight:700;">黑卡專屬 • 莊園咖啡 7 折起</div>
+          </div>
+        `,
+        channelAnalysis: '主要投放於 <strong>Facebook 長貼文、Instagram Reels、LINE官方黑卡推播</strong>。鎖定<strong>開學季、國考考試週及平日早晨</strong>。',
+        taAnalysis: '<strong>大專院校學生、自由工作者 (Freelancer)、注重開銷的小資族</strong>。文案強調「銅板價升級莊園豆」、「黑卡積點打折」。',
+        lessonText: '課堂核心呼應：廣告用「黑卡會員折抵」強化歸屬感，反推其策略就是透過親民門檻緊緊鎖定學生與小資基礎客盤。',
+
+        segDesc: '市場區隔鎖定「對價格敏感、但渴望優於超商咖啡品質與座位環境」的中間廣大客層。',
+        targetDesc: '大專院校學生、準備國考/證照的考生、自由接案工作者、講求經濟實惠的在地社區居民。',
+        posDesc: '佔據「高性價比・友善自修與生活鄰里」的獨特生態位，比超商多座位與品質，比星巴克便宜近半。',
+        mapItems: [
+          { name: '路易莎 (本品牌)', x: 260, y: 150, fill: '#f58220', isTarget: true },
+          { name: '星巴克', x: 380, y: 70, fill: '#00A862' },
+          { name: 'cama café', x: 200, y: 160, fill: '#eab308' },
+          { name: '7-11 City Cafe', x: 100, y: 260, fill: '#38bdf8' },
+          { name: '全家 Let\'s Cafe', x: 130, y: 240, fill: '#818cf8' },
+          { name: '怡客/丹堤咖啡', x: 170, y: 190, fill: '#94a3b8' }
+        ],
+        xAxisLabel: '空間氛圍與附加價值 (純快速外帶 → 全方位自修工作場域)',
+        yAxisLabel: '價格與取得門檻 (平價實惠 → 高昂精品)',
+
+        archetypeAvatar: '🧑‍🎓',
+        archetypeName: '勤奮親和的大學學長 / 社區熱血青年',
+        archetypeTraits: '親切・樸實・實用主義・充滿元氣',
+        archetypeQuote: '「穿著整潔耐穿的連帽衫與帆布鞋，背包裡裝滿筆記。隨和好相處，不擺架子，隨時樂意幫你留一個位子、熱心分享插座。」',
+        celebrityRef: '✨ 擬人化明星對標：<strong>盧廣仲、陳昊森、曾博恩</strong>。給人接地氣、努力奮鬥、隨和親民、沒有距離感的正向生活感。',
+        s5PlaceholderTitle: '建議配圖：藝人「盧廣仲」或熱血勤奮學長形象照',
+        s5PlaceholderDesc: '建議挑選抱著吉他、戴黑框眼鏡、笑容燦爛接地氣之形象照，對標「勤奮親和、陪伴生活的小資鄰家好夥伴」！',
+        s5PlaceholderSpec: '建議規格：1:1 正方形 • 500×500px 以上清晰肖像',
+        traits: [
+          { name: '親和友善 (Sincerity)', score: 92, left: '高傲疏離', right: '樸實溫暖' },
+          { name: '能力信賴 (Competence)', score: 76, left: '品質堪憂', right: '紮實可靠' },
+          { name: '實用樸質 (Pragmatism)', score: 90, left: '奢華浮誇', right: '務實超值' },
+          { name: '時尚潮流 (Excitement)', score: 55, left: '日常穩健', right: '前衛先鋒' },
+          { name: '知性深度 (Sophistication)', score: 62, left: '庶民親切', right: '貴族格調' }
+        ],
+        speechNotes: [
+          `「老師、同學好，我們這組要介紹的品牌是在台灣快速崛起的平價連鎖巨頭——路易莎咖啡 (Louisa Coffee)。創立於2006年台北，路易莎以『平價提供莊園級精品咖啡』為使命，在台灣擁有超過540家門市，超越星巴克成為門市數量最多的連鎖咖啡。」`,
+          `「第2頁核心競爭力：路易莎最強的在於自建智慧中央烘豆廠與餐食廚房的垂直整合能力，成功壓低原料成本。同時門市廣泛配置插座與大桌子，打造出不可替代的『國民自修室』生態。」`,
+          `「第3頁廣告與客群反推：路易莎廣告常在社群主打『黑卡會員專屬折扣』與『加價升級莊園豆』。文案直接打動重視開銷、長時間泡在店裡自習與工作的學生與自由接案者。」`,
+          `「第4頁品牌定位：在二維定位圖上，路易莎精準卡位在星巴克與超商之間的黃金平衡點——比超商多了舒適的久坐自修空間與現做熱食，但價格又比星巴克便宜近半，是高性價比的最佳代表。」`,
+          `「第5頁品牌個性：如果路易莎是一個人，他就像是一位『親切熱心的大學學長或鄰家青年』，類似盧廣仲給人的感覺——隨和踏實、沒有距離感、不講虛話，隨時樂意在店裡為你留一張桌子和插座。」`
+        ]
+      }
+    };
+
+    let currentBrand = 'sukiya';
+    let currentSlide = 0;
+    const totalSlides = 5;
+
+    const slideTitles = [
+      "品牌名稱與視覺識別",
+      "核心競爭力分析",
+      "廣告渠道與客群反推洞察",
+      "品牌定位與定位圖",
+      "品牌個性與擬人化代表"
+    ];
+
+    function setBrand(brandKey) {
+      currentBrand = brandKey;
+      document.getElementById('btnSukiya').classList.toggle('active', brandKey === 'sukiya');
+      document.getElementById('btnStarbucks').classList.toggle('active', brandKey === 'starbucks');
+      document.getElementById('btnLouisa').classList.toggle('active', brandKey === 'louisa');
+      
+      const data = brandData[brandKey];
+      document.documentElement.style.setProperty('--accent-current', data.primaryColor);
+      document.documentElement.style.setProperty('--accent-sub', data.accentColor);
+      document.documentElement.style.setProperty('--accent-glow', data.glowColor);
+
+      renderBrandContent();
+      updateSpeechPrompter();
+    }
+
+    function renderBrandContent() {
+      const data = brandData[currentBrand];
+
+      // S1
+      document.getElementById('s1-logo-container').innerHTML = data.logoSvg;
+      document.getElementById('s1-name-zh').innerText = data.nameZh;
+      document.getElementById('s1-name-en').innerText = data.nameEn;
+      document.getElementById('s1-slogan').innerHTML = data.slogan;
+      document.getElementById('s1-founded').innerText = data.founded;
+      document.getElementById('s1-category').innerText = data.category;
+      document.getElementById('s1-stores').innerText = data.stores;
+
+      const s1Title = document.getElementById('s1-visual-title');
+      if (s1Title) s1Title.innerText = data.s1PlaceholderTitle || data.visualTitle;
+      const s1Desc = document.getElementById('s1-placeholder-desc');
+      if (s1Desc && data.s1PlaceholderDesc) s1Desc.innerHTML = data.s1PlaceholderDesc;
+      const s1Spec = document.getElementById('s1-placeholder-spec');
+      if (s1Spec && data.s1PlaceholderSpec) s1Spec.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> ${data.s1PlaceholderSpec}`;
+
+      // S2
+      document.getElementById('s2-core-highlight').innerText = data.coreHighlight;
+      document.getElementById('s2-core-desc').innerText = data.coreDesc;
+      const s2PhTitle = document.getElementById('s2-ph-title');
+      if (s2PhTitle && data.s2PlaceholderTitle) s2PhTitle.innerText = data.s2PlaceholderTitle;
+      const s2PhDesc = document.getElementById('s2-ph-desc');
+      if (s2PhDesc && data.s2PlaceholderDesc) s2PhDesc.innerText = data.s2PlaceholderDesc;
+      
+      const compList = document.getElementById('s2-points');
+      compList.innerHTML = data.compPoints.map(p => `
+        <div class="comp-item">
+          <span class="comp-icon">✦</span>
+          <div>
+            <strong style="color:#fff;">${p.label}：</strong>${p.text}
+          </div>
+        </div>
+      `).join('');
+
+      const hierContainer = document.getElementById('s2-hierarchy');
+      hierContainer.innerHTML = data.hierarchy.map(h => `
+        <div class="tier-box ${h.class}">
+          <span class="tier-name">${h.tier}</span>
+          <span class="tier-desc">${h.desc}</span>
+        </div>
+      `).join('');
+
+      // S3
+      const phoneScreen = document.getElementById('s3-phone-screen');
+      if (phoneScreen) {
+        if (currentBrand === 'sukiya') {
+          phoneScreen.innerHTML = `
+            <div style="width:100%; height:100%; overflow:hidden; background:#fff; display:flex; align-items:flex-start;">
+              <img src="sukiya廣告fb.jpg" alt="SUKIYA Facebook 官方廣告實截圖" class="phone-real-img" />
+            </div>
+          `;
+        } else {
+          phoneScreen.innerHTML = `
+            <div class="ad-card-fb" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div class="ad-header">
+                <div class="ad-avatar">${data.adAvatar}</div>
+                <div>
+                  <div class="ad-meta-title">${data.adBrand}</div>
+                  <div class="ad-sponsored-tag">贊助內容 Sponsored • 󰟝 公開</div>
+                </div>
+              </div>
+              <div class="ad-copy">${data.adCopy}</div>
+              <div class="ad-image-box">${data.adImgGraphic}</div>
+              <div class="ad-social-stats">
+                <span>👍 ❤️ 2.4萬讚</span>
+                <span>1,280則留言 • 850次分享</span>
+              </div>
+              <div class="ad-cta-bar">
+                <span>${data.adDomain || 'STARBUCKS.COM.TW'}</span>
+                <span class="ad-cta-btn">查看優惠 ➔</span>
+              </div>
+            </div>
+          `;
+        }
+      }
+      document.getElementById('s3-channel-analysis').innerHTML = data.channelAnalysis;
+      document.getElementById('s3-ta-analysis').innerHTML = data.taAnalysis;
+      document.getElementById('s3-lesson').innerHTML = data.lessonText;
+
+      // S4
+      document.getElementById('s4-seg-desc').innerText = data.segDesc;
+      document.getElementById('s4-target-desc').innerText = data.targetDesc;
+      document.getElementById('s4-pos-desc').innerText = data.posDesc;
+      renderPositioningMap();
+
+      // S5
+      document.getElementById('s5-archetype-avatar').innerText = data.archetypeAvatar;
+      document.getElementById('s5-archetype-name').innerText = data.archetypeName;
+      document.getElementById('s5-archetype-traits').innerText = data.archetypeTraits;
+      document.getElementById('s5-archetype-quote').innerText = data.archetypeQuote;
+      document.getElementById('s5-celebrity-ref').innerHTML = data.celebrityRef;
+
+      const celebTitle = document.getElementById('s5-celeb-title');
+      if (celebTitle && data.s5PlaceholderTitle) celebTitle.innerText = data.s5PlaceholderTitle;
+      const celebDesc = document.getElementById('s5-celeb-desc');
+      if (celebDesc && data.s5PlaceholderDesc) celebDesc.innerText = data.s5PlaceholderDesc;
+      const celebSpec = document.getElementById('s5-celeb-spec');
+      if (celebSpec && data.s5PlaceholderSpec) celebSpec.innerText = data.s5PlaceholderSpec;
+
+      const traitsContainer = document.getElementById('s5-traits-container');
+      traitsContainer.innerHTML = data.traits.map(t => `
+        <div class="trait-row">
+          <div class="trait-labels">
+            <span>${t.name} (${t.left})</span>
+            <span style="color:#fff;">${t.score}% • ${t.right}</span>
+          </div>
+          <div class="trait-bar-track">
+            <div class="trait-bar-fill" style="width: ${t.score}%;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderPositioningMap() {
+      const data = brandData[currentBrand];
+      const svg = document.getElementById('positioningMapSvg');
+      
+      let html = `
+        <defs>
+          <radialGradient id="targetGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="${data.accentColor}" stop-opacity="0.75"/>
+            <stop offset="100%" stop-color="${data.primaryColor}" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <rect x="270" y="20" width="250" height="140" fill="rgba(255,255,255,0.02)" rx="8"/>
+        
+        <line x1="30" y1="160" x2="510" y2="160" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+        <line x1="270" y1="20" x2="270" y2="300" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+
+        <text x="505" y="154" fill="#94a3b8" font-size="10.5" text-anchor="end" font-weight="700">家庭友善 / 多元客製 ➔</text>
+        <text x="35" y="154" fill="#94a3b8" font-size="10.5" text-anchor="start" font-weight="700">⬅ 純單人吧台</text>
+        
+        <text x="275" y="36" fill="#94a3b8" font-size="10.5" font-weight="700">⬆ 高價悠閒定食</text>
+        <text x="275" y="294" fill="#94a3b8" font-size="10.5" font-weight="700">⬇ 平價極速快餐</text>
+      `;
+
+      data.mapItems.forEach(item => {
+        if (item.isTarget) {
+          html += `
+            <circle cx="${item.x}" cy="${item.y}" r="26" fill="url(#targetGlow)"/>
+            <circle cx="${item.x}" cy="${item.y}" r="10" fill="${item.fill}" stroke="#fff" stroke-width="2.5"/>
+            <text x="${item.x}" y="${item.y - 14}" fill="#ffffff" font-size="12" font-weight="900" text-anchor="middle" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.9))">★ ${item.name}</text>
+          `;
+        } else {
+          html += `
+            <circle cx="${item.x}" cy="${item.y}" r="6.5" fill="${item.fill}" opacity="0.85"/>
+            <text x="${item.x}" y="${item.y + 16}" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">${item.name}</text>
+          `;
+        }
+      });
+
+      svg.innerHTML = html;
+    }
+
+    function updateDeck() {
+      for (let i = 0; i < totalSlides; i++) {
+        const slide = document.getElementById(`slide-${i+1}`);
+        if (slide) {
+          slide.classList.toggle('active', i === currentSlide);
+        }
+      }
+
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentSlide);
+      });
+
+      document.getElementById('prevBtn').disabled = currentSlide === 0;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+
+      // Update Speech Prompter text on page flip
+      updateSpeechPrompter();
+    }
+
+    function updateSpeechPrompter() {
+      const data = brandData[currentBrand];
+      const slideNumStr = String(currentSlide + 1).padStart(2, '0');
+      document.getElementById('speechSlideBadge').innerText = `SLIDE ${slideNumStr} 講稿`;
+      document.getElementById('speechSlideTitle').innerText = slideTitles[currentSlide];
+      
+      const speech = (data.speechNotes && data.speechNotes[currentSlide]) 
+        ? data.speechNotes[currentSlide] 
+        : "本頁口頭報告備忘錄準備中...";
+
+      document.getElementById('speechText').innerHTML = speech.replace(/\n/g, '<br>');
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateDeck();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateDeck();
+      }
+    }
+
+    function goToSlide(idx) {
+      if (idx >= 0 && idx < totalSlides) {
+        currentSlide = idx;
+        updateDeck();
+      }
+    }
+
+    // Toggle Speech Drawer
+    function toggleSpeechDrawer() {
+      const drawer = document.getElementById('speechDrawer');
+      const btn = document.getElementById('btnSpeechToggle');
+      drawer.classList.toggle('open');
+      btn.classList.toggle('active');
+    }
+
+    function copyCurrentSpeech() {
+      const data = brandData[currentBrand];
+      const text = data.speechNotes[currentSlide];
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`已複製 Slide ${currentSlide + 1} 講稿至剪貼簿！`);
+      }).catch(() => {
+        alert('請手動選取文字複製。');
+      });
+    }
+
+    function toggleAllSpeechModal() {
+      const data = brandData[currentBrand];
+      let fullText = `【${data.nameZh} 品牌期中報告 - 完整 5 頁連貫講稿】\n\n`;
+      data.speechNotes.forEach((script, idx) => {
+        fullText += `=== [SLIDE 0${idx + 1}：${slideTitles[idx]}] ===\n${script}\n\n`;
+      });
+      navigator.clipboard.writeText(fullText).then(() => {
+        alert(`已為您複製整份報告（全部 5 頁）的連貫完整講稿至剪貼簿！可以直接貼到備忘錄練習！`);
+      });
+    }
+
+    function toggleNotes() {
+      const drawer = document.getElementById('notesDrawer');
+      drawer.classList.toggle('open');
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn('Fullscreen request blocked', err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // PDF Download Function
+    function downloadPDF() {
+      const brandName = brandData[currentBrand].nameZh.replace(/\s+/g, '');
+      const filename = `${brandName}_品牌期中報告_16比9簡報.pdf`;
+
+      if (window.html2pdf) {
+        const confirmPrint = confirm(`準備下載【${brandName}】16:9 PDF 簡報。\n\n按「確定」將使用高畫質 PDF 產生引擎下載。\n（您也可以直接按鍵盤 Ctrl + P 在列印視窗中選擇「另存為 PDF」，享有 100% 原始向量清晰度！）`);
+        if (!confirmPrint) return;
+
+        const exportContainer = document.createElement('div');
+        exportContainer.style.background = '#070a12';
+        exportContainer.style.color = '#f8fafc';
+        exportContainer.style.padding = '0';
+        exportContainer.style.width = '1200px';
+
+        for (let i = 1; i <= 5; i++) {
+          const slideEl = document.getElementById(`slide-${i}`);
+          if (slideEl) {
+            const clone = slideEl.cloneNode(true);
+            clone.style.display = 'flex';
+            clone.style.width = '1200px';
+            clone.style.height = '675px'; // Exact 16:9
+            clone.style.aspectRatio = '16 / 9';
+            clone.style.borderRadius = '0';
+            clone.style.border = 'none';
+            clone.style.boxShadow = 'none';
+            clone.style.margin = '0';
+            clone.style.padding = '36px 48px';
+            clone.style.pageBreakAfter = 'always';
+            exportContainer.appendChild(clone);
+          }
+        }
+
+        const opt = {
+          margin: 0,
+          filename: filename,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, backgroundColor: '#070a12' },
+          jsPDF: { unit: 'in', format: [16, 9], orientation: 'landscape' }
+        };
+
+        html2pdf().set(opt).from(exportContainer).save().catch(err => {
+          console.error(err);
+          window.print();
+        });
+      } else {
+        window.print();
+      }
+    }
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 's' || e.key === 'S') {
+        toggleSpeechDrawer();
+      } else if (e.key === 'p' || e.key === 'P') {
+        downloadPDF();
+      }
+    });
+
+    // Default load Sukiya
+    setBrand('sukiya');
+  </script>
+</body>
+</html>
